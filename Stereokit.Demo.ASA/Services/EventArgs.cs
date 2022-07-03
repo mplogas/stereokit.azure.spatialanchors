@@ -9,7 +9,8 @@ namespace Stereokit.Demo.ASA.Services
 {
     internal class SpatialAnchorLocatedEventArgs : EventArgs
     {
-
+        internal string Id;
+        internal Pose Anchor;
     }
 
     internal class AsaSessionUpdateEventArgs : EventArgs
@@ -19,7 +20,7 @@ namespace Stereokit.Demo.ASA.Services
 
     internal class AsaLogEventArgs : EventArgs
     {
-        internal LogLevel LogLevel;
-        internal string LogMessage;
+        internal LogLevel LogLevel = LogLevel.Error;
+        internal string LogMessage = string.Empty;
     }
 }

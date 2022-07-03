@@ -112,7 +112,7 @@
     <PackageReference Include="StereoKit" Version="0.3.*" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Retro UFO.glb">
+    <EmbeddedResource Include="Assets\retro_ufo.glb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

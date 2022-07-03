@@ -18,9 +18,12 @@ namespace Stereokit.Demo.ASA.Services
 
         private readonly CloudSpatialAnchorSession cloudSession;
         private CloudSpatialAnchorWatcher cloudSpatialAnchorWatcher;
+        private Dictionary<string, Pose> anchorCache;
 
         public SpatialAnchorsWrapper(string accountId, string accountKey, string domain)
         {
+            anchorCache = new Dictionary<string, Pose>();
+
             this.cloudSession = new CloudSpatialAnchorSession();
             this.cloudSession.Configuration.AccountId = accountId;
             this.cloudSession.Configuration.AccountKey = accountKey;
@@ -143,8 +146,27 @@ namespace Stereokit.Demo.ASA.Services
         private void CloudSessionOnAnchorLocated(object sender, AnchorLocatedEventArgs args)
         {
             //https://stereokit.net/Pages/Reference/World/FromPerceptionAnchor.html
+            switch (args.Status)
+            {
+                case LocateAnchorStatus.Located:
+                    var csa = args.Anchor;
+                    if (csa?.LocalAnchor != null)
+                    {
+                        // do we know the anchor already?
+                        if (!this.anchorCache.ContainsKey(csa.Identifier))
+                        {
+                            if (World.FromPerceptionAnchor(csa.LocalAnchor, out var localAnchor))
+                            {
+                                this.anchorCache[csa.Identifier] = localAnchor;
+                                SpatialAnchorLocated?.Invoke(this, new SpatialAnchorLocatedEventArgs {Anchor = localAnchor, Id = csa.Identifier});
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
 
-            throw new NotImplementedException();
         }
 
         private void CloudSessionOnError(object sender, SessionErrorEventArgs args)
