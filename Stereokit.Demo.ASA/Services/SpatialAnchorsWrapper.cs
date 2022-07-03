@@ -105,7 +105,8 @@ namespace Stereokit.Demo.ASA.Services
                 LocalAnchor = anchor
             };
 
-
+            //TODO: does this work?
+            SpatialAnchor.TryCreateRelativeTo(reference.CoordinateSystem, pose.position);
 
         }
 
@@ -163,6 +164,7 @@ namespace Stereokit.Demo.ASA.Services
                         }
                     }
                     break;
+                //TODO: nottracked scenario for locating anchors by id
                 default:
                     break;
             }
