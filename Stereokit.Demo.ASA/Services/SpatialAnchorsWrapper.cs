@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,12 @@ using StereoKit;
 
 namespace Stereokit.Demo.ASA.Services
 {
-    internal class SpatialAnchorsWrapper
+    internal class SpatialAnchorsWrapper : ISpatialAnchorsWrapper
     {
+        public event EventHandler<SpatialAnchorLocatedEventArgs> SpatialAnchorLocated;
+        public event EventHandler<AsaSessionUpdateEventArgs> ASASessionUpdate;
+        public event EventHandler<AsaLogEventArgs> ASALogEvent;
+
         private readonly CloudSpatialAnchorSession cloudSession;
         private CloudSpatialAnchorWatcher cloudSpatialAnchorWatcher;
 
@@ -50,7 +55,7 @@ namespace Stereokit.Demo.ASA.Services
 
         public void StartLocatingAnchors(int maxResults = 5, float distance = 10)
         {
-            StopLocatingAnchors(); //just one watchersession is currently supported TODO: confirm
+            StopLocatingAnchors();
 
             var deviceCriteria = new NearDeviceCriteria
             {
@@ -67,7 +72,7 @@ namespace Stereokit.Demo.ASA.Services
 
         public void StartLocatingAnchors(string[] anchorIds)
         {
-            StopLocatingAnchors(); //just one watchersession is currently supported TODO: confirm
+            StopLocatingAnchors();
 
             // criteria in detail: https://docs.microsoft.com/en-us/azure/spatial-anchors/concepts/anchor-locate-strategy
             var criteria = new AnchorLocateCriteria
@@ -79,6 +84,7 @@ namespace Stereokit.Demo.ASA.Services
 
         public void StopLocatingAnchors()
         {
+            //just one watchersession is currently supported TODO: reach out to patrick & confirm
             var activeWatchers = this.cloudSession.GetActiveWatchers();
             foreach (var watcher in activeWatchers)
             {
@@ -99,6 +105,9 @@ namespace Stereokit.Demo.ASA.Services
 
 
         }
+
+
+
 
         private PlatformLocationProvider BuildCoarseLocationProvider()
         {
@@ -140,12 +149,24 @@ namespace Stereokit.Demo.ASA.Services
 
         private void CloudSessionOnError(object sender, SessionErrorEventArgs args)
         {
-            throw new NotImplementedException();
+            var eventArgs = new AsaLogEventArgs
+            {
+                LogLevel = LogLevel.Error,
+                LogMessage = $"Error code {args.ErrorCode.ToString()}: {args.ErrorMessage}"
+            };
+
+            ASALogEvent?.Invoke(this, eventArgs);
         }
 
         private void CloudSessionOnOnLogDebug(object sender, OnLogDebugEventArgs args)
         {
-            throw new NotImplementedException();
+            var eventArgs = new AsaLogEventArgs
+            {
+                LogLevel = LogLevel.Diagnostic,
+                LogMessage = args.Message
+            };
+
+            ASALogEvent?.Invoke(this, eventArgs);
         }
     }
 }

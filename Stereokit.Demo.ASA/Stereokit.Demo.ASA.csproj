@@ -71,8 +71,14 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="LogWindow.cs" />
+    <Compile Include="MainScene.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\EventArgs.cs" />
+    <Compile Include="Services\ISpatialAnchorsWrapper.cs" />
+    <Compile Include="Services\MockSpatialAnchorsWrapper.cs" />
     <Compile Include="Services\SpatialAnchorsWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
