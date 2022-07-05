@@ -31,9 +31,8 @@ namespace Stereokit.Demo.ASA
 #else
             asaService = new SpatialAnchorsWrapper(Configuration.AccountId, Configuration.AccountKey, Configuration.Domain);
 #endif
-            var logging = new LogWindow(asaService);
             var mainScene = new MainScene(asaService);
-            SK.AddStepper(logging);
+            SK.AddStepper<LogWindow>();
             SK.AddStepper(mainScene);
 
             Matrix floorTransform = Matrix.TS(0, -1.5f, 0, new Vec3(30, 0.1f, 30));

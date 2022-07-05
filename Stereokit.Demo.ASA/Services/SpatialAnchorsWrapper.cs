@@ -136,16 +136,29 @@ namespace Stereokit.Demo.ASA.Services
 
         private void CloudSessionOnSessionUpdated(object sender, SessionUpdatedEventArgs args)
         {
-            throw new NotImplementedException();
+            var sb = new StringBuilder();
+            sb.AppendLine(
+                $"{nameof(args.Status.RecommendedForCreateProgress)}: {args.Status.RecommendedForCreateProgress}");
+            sb.AppendLine($"{nameof(args.Status.ReadyForCreateProgress)}: {args.Status.ReadyForCreateProgress}");
+            sb.AppendLine($"{nameof(args.Status.SessionCreateHash)}: {args.Status.SessionCreateHash}");
+            sb.AppendLine($"{nameof(args.Status.SessionLocateHash)}: {args.Status.SessionLocateHash}");
+            sb.AppendLine($"{args.Status.UserFeedback}: {args.Status.UserFeedback}");
+
+            Log.Write(LogLevel.Diagnostic, sb.ToString());
         }
 
         private void CloudSessionOnLocateAnchorsCompleted(object sender, LocateAnchorsCompletedEventArgs args)
         {
-            throw new NotImplementedException();
+            var message = args.Cancelled ? $"{args.Watcher.Identifier} cancelled" : $"{args.Watcher.Identifier} stopped";
+
+            Log.Write(LogLevel.Diagnostic, message);
         }
 
         private void CloudSessionOnAnchorLocated(object sender, AnchorLocatedEventArgs args)
         {
+            var message = $"Anchor {args.Identifier} returned {args.Status}";
+            Log.Write(LogLevel.Diagnostic, message);
+
             //https://stereokit.net/Pages/Reference/World/FromPerceptionAnchor.html
             switch (args.Status)
             {
@@ -179,6 +192,7 @@ namespace Stereokit.Demo.ASA.Services
                 LogMessage = $"Error code {args.ErrorCode.ToString()}: {args.ErrorMessage}"
             };
 
+            Log.Write(LogLevel.Error, eventArgs.LogMessage);
             ASALogEvent?.Invoke(this, eventArgs);
         }
 
@@ -190,6 +204,7 @@ namespace Stereokit.Demo.ASA.Services
                 LogMessage = args.Message
             };
 
+            Log.Write(LogLevel.Diagnostic, eventArgs.LogMessage);
             ASALogEvent?.Invoke(this, eventArgs);
         }
     }

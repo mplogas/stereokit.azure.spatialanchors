@@ -14,6 +14,9 @@ namespace Stereokit.Demo.ASA
         private readonly ISpatialAnchorsWrapper service;
         private Pose windowPose;
         private string sessionState = "unknown";
+        private Dictionary<string, Pose> anchors = new Dictionary<string, Pose>();
+        private Model model = Model.FromFile("retro_ufo.glb");
+        private string watcherState = "stopped";
 
         public MainScene(ISpatialAnchorsWrapper asaService)
         {
@@ -32,7 +35,7 @@ namespace Stereokit.Demo.ASA
         public void Step()
         {
             UI.WindowBegin("Control", ref windowPose);
-            UI.Text($"state: {sessionState}", TextAlign.TopRight); 
+            UI.Text($"state: {this.sessionState}", TextAlign.TopRight); 
             if (UI.Button("Start"))
             {
                 this.service.StartSession();
@@ -45,12 +48,29 @@ namespace Stereokit.Demo.ASA
                 this.sessionState = "stopped";
             }
 
+            UI.Text($"watcher: {this.watcherState}", TextAlign.XRight);
+            if (UI.Button("Start"))
+            {
+                this.service.StartLocatingAnchors();
+                this.sessionState = "started";
+            }
+            UI.SameLine();
+            if (UI.Button("Stop"))
+            {
+                this.service.StopLocatingAnchors();
+                this.sessionState = "stopped";
+            }
             if (UI.Button("Quit"))
             {
                 this.service.EndSession();
                 SK.Quit();
             }
             UI.WindowEnd();
+
+            foreach (var anchor in anchors)
+            {
+                model.Draw(anchor.Value.ToMatrix(0.1f));
+            }
         }
 
         public void Shutdown()
@@ -61,7 +81,8 @@ namespace Stereokit.Demo.ASA
 
         private void ServiceOnSpatialAnchorLocated(object sender, SpatialAnchorLocatedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.anchors[e.Id] = e.Anchor;
+
         }
 
         private void ServiceOnASASessionUpdate(object sender, AsaSessionUpdateEventArgs e)

@@ -9,49 +9,62 @@ using StereoKit.Framework;
 
 namespace Stereokit.Demo.ASA
 {
+    internal struct LogEntry
+    {
+        internal DateTime DateTime;
+        internal LogLevel LogLevel;
+        internal string LogMessage;
+    }
+
     internal class LogWindow : IStepper
     {
-        private readonly ISpatialAnchorsWrapper service;
         private Pose windowPose;
-        private string log = string.Empty;
+        private List<LogEntry> logEntries = new List<LogEntry>();
 
-        public LogWindow(ISpatialAnchorsWrapper service)
+        public LogWindow()
         {
-            this.service = service;
-            this.service.ASALogEvent += ServiceOnASALogEvent;
             windowPose = new Pose(0.2f, 0.3f, -0.4f, Quat.LookDir(-1, 0, 1));
         }
 
-        private void ServiceOnASALogEvent(object sender, AsaLogEventArgs e)
+        private void LogEventReceived(LogLevel level, string text)
+        {
+            this.logEntries.Add(new LogEntry {DateTime = DateTime.UtcNow, LogLevel = level, LogMessage = text});
+        }
+
+        private string BuildLogMessage(LogEntry logEntry)
         {
             var sb = new StringBuilder();
-            sb.Append(DateTime.UtcNow.ToLongTimeString());
+            sb.Append(logEntry.DateTime.ToLongTimeString());
             sb.Append(" - ");
-            sb.Append(e.LogLevel.ToString());
+            sb.Append(logEntry.LogLevel.ToString());
             sb.Append(Environment.NewLine);
-            sb.AppendLine(e.LogMessage);
+            sb.AppendLine(logEntry.LogMessage);
             sb.Append(Environment.NewLine);
 
-            this.log += sb.ToString();
+            return sb.ToString();
         }
 
         public bool Initialize()
         {
-            this.log = string.Empty; //allows resetting the log window
+            Log.Subscribe(LogEventReceived);
             return true;
         }
 
         public void Step()
         {
-
-            //UI.WindowBegin("Log", ref windowPose, UIWin.Body);
             UI.WindowBegin("Log", ref windowPose, new Vec2(0.3f, 0.1f));
-            UI.Text(this.log);
+
+            foreach (var entry in this.logEntries.OrderByDescending(e => e.DateTime).Take(15))
+            {
+                UI.Text(BuildLogMessage(entry));
+            }
+
             UI.WindowEnd();
         }
 
         public void Shutdown()
         {
+            Log.Unsubscribe(LogEventReceived);
         }
 
         public bool Enabled => true;
