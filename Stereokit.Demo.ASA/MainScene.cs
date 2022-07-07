@@ -69,8 +69,18 @@ namespace Stereokit.Demo.ASA
 
             foreach (var anchor in anchors)
             {
-                model.Draw(anchor.Value.ToMatrix(0.1f));
+                DrawModel(anchor.Value);
             }
+        }
+
+        private void DrawModel(Pose anchor)
+        {
+            //taken from https://stereokit.net/Pages/Reference/Model.html
+            var scale = 0.1f;
+            UI.HandleBegin("Anchor Handle", ref anchor, this.model.Bounds * scale);
+            model.Draw(Matrix.S(scale));
+            Mesh.Cube.Draw(Material.UIBox, Matrix.TS(this.model.Bounds.center * scale, this.model.Bounds.dimensions * scale));
+            UI.HandleEnd();
         }
 
         public void Shutdown()

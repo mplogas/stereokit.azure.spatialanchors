@@ -20,7 +20,6 @@ namespace Stereokit.Demo.ASA.Services
         public event EventHandler<AsaLogEventArgs> ASALogEvent;
 
         private readonly CloudSpatialAnchorSession cloudSession;
-        private CloudSpatialAnchorWatcher cloudSpatialAnchorWatcher;
 
         public SpatialAnchorsWrapper(string accountId, string accountKey, string domain)
         {
@@ -89,8 +88,11 @@ namespace Stereokit.Demo.ASA.Services
         public void StopLocatingAnchors()
         {
             //just one watchersession is supported, despite the name of the API
-            var activeWatcher = this.cloudSession.GetActiveWatchers()[0];
-            activeWatcher?.Stop();
+            //but this way we make sure we'Re not running into an NRE
+           foreach (var activeWatcher in this.cloudSession.GetActiveWatchers())
+           {
+               activeWatcher.Stop();
+            }
         }
 
         public void CreateCloudAnchor(Pose pose)
