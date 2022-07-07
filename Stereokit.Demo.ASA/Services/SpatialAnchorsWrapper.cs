@@ -10,6 +10,9 @@ using StereoKit;
 
 namespace Stereokit.Demo.ASA.Services
 {
+    //1 watcher, max 35 anchors
+    //https://docs.microsoft.com/en-us/azure/spatial-anchors/how-tos/create-locate-anchors-unity#locate-a-cloud-spatial-anchor
+
     internal class SpatialAnchorsWrapper : ISpatialAnchorsWrapper
     {
         public event EventHandler<SpatialAnchorLocatedEventArgs> SpatialAnchorLocated;
@@ -58,6 +61,7 @@ namespace Stereokit.Demo.ASA.Services
 
         public void StartLocatingAnchors(int maxResults = 5, float distance = 10)
         {
+            //maxresults: 35
             StopLocatingAnchors();
 
             var deviceCriteria = new NearDeviceCriteria
@@ -171,6 +175,7 @@ namespace Stereokit.Demo.ASA.Services
                         {
                             if (World.FromPerceptionAnchor(csa.LocalAnchor, out var localAnchor))
                             {
+                                Log.Write(LogLevel.Info, $"anchor {csa.Identifier} position X:{localAnchor.position.x} Y:{localAnchor.position.y} Z:{localAnchor.position.z}");
                                 this.anchorCache[csa.Identifier] = localAnchor;
                                 SpatialAnchorLocated?.Invoke(this, new SpatialAnchorLocatedEventArgs {Anchor = localAnchor, Id = csa.Identifier});
                             }

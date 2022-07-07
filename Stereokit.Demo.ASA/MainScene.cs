@@ -52,13 +52,13 @@ namespace Stereokit.Demo.ASA
             if (UI.Button("Start"))
             {
                 this.service.StartLocatingAnchors();
-                this.sessionState = "started";
+                this.watcherState = "started";
             }
             UI.SameLine();
             if (UI.Button("Stop"))
             {
                 this.service.StopLocatingAnchors();
-                this.sessionState = "stopped";
+                this.watcherState = "stopped";
             }
             if (UI.Button("Quit"))
             {

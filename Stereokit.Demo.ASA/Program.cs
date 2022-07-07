@@ -20,7 +20,7 @@ namespace Stereokit.Demo.ASA
                 blendPreference = DisplayBlend.AnyTransparent, // we're doing this demo for HL
                 displayPreference = DisplayMode.MixedReality,
 #endif
-                logFilter = LogLevel.Diagnostic //I have no idea what I'm doing so please show me everything :D
+                logFilter = LogLevel.Info //I have no idea what I'm doing so please show me everything :D
             };
             if (!SK.Initialize(settings))
                 Environment.Exit(1);
