@@ -10,7 +10,7 @@ using StereoKit;
 
 namespace Stereokit.Demo.ASA.Services
 {
-    //1 watcher, max 35 anchors
+    //max 1 watcher, max 35 anchors per watcher
     //https://docs.microsoft.com/en-us/azure/spatial-anchors/how-tos/create-locate-anchors-unity#locate-a-cloud-spatial-anchor
 
     internal class SpatialAnchorsWrapper : ISpatialAnchorsWrapper
@@ -21,12 +21,9 @@ namespace Stereokit.Demo.ASA.Services
 
         private readonly CloudSpatialAnchorSession cloudSession;
         private CloudSpatialAnchorWatcher cloudSpatialAnchorWatcher;
-        private Dictionary<string, Pose> anchorCache;
 
         public SpatialAnchorsWrapper(string accountId, string accountKey, string domain)
         {
-            anchorCache = new Dictionary<string, Pose>();
-
             this.cloudSession = new CloudSpatialAnchorSession();
             this.cloudSession.Configuration.AccountId = accountId;
             this.cloudSession.Configuration.AccountKey = accountKey;
@@ -91,12 +88,9 @@ namespace Stereokit.Demo.ASA.Services
 
         public void StopLocatingAnchors()
         {
-            //just one watchersession is currently supported TODO: reach out to patrick & confirm
-            var activeWatchers = this.cloudSession.GetActiveWatchers();
-            foreach (var watcher in activeWatchers)
-            {
-                watcher.Stop();
-            }
+            //just one watchersession is supported, despite the name of the API
+            var activeWatcher = this.cloudSession.GetActiveWatchers()[0];
+            activeWatcher?.Stop();
         }
 
         public void CreateCloudAnchor(Pose pose)
@@ -170,15 +164,10 @@ namespace Stereokit.Demo.ASA.Services
                     var csa = args.Anchor;
                     if (csa?.LocalAnchor != null)
                     {
-                        // do we know the anchor already?
-                        if (!this.anchorCache.ContainsKey(csa.Identifier))
+                        if (World.FromPerceptionAnchor(csa.LocalAnchor, out var localAnchor))
                         {
-                            if (World.FromPerceptionAnchor(csa.LocalAnchor, out var localAnchor))
-                            {
-                                Log.Write(LogLevel.Info, $"anchor {csa.Identifier} position X:{localAnchor.position.x} Y:{localAnchor.position.y} Z:{localAnchor.position.z}");
-                                this.anchorCache[csa.Identifier] = localAnchor;
-                                SpatialAnchorLocated?.Invoke(this, new SpatialAnchorLocatedEventArgs {Anchor = localAnchor, Id = csa.Identifier});
-                            }
+                            Log.Write(LogLevel.Info, $"anchor {csa.Identifier} position X:{localAnchor.position.x} Y:{localAnchor.position.y} Z:{localAnchor.position.z}");
+                            SpatialAnchorLocated?.Invoke(this, new SpatialAnchorLocatedEventArgs { Anchor = localAnchor, Id = csa.Identifier });
                         }
                     }
                     break;
