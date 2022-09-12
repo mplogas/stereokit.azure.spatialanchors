@@ -15,7 +15,7 @@
   <mp:PhoneIdentity PhoneProductId="dc70f324-ab59-4f33-b52b-db209b28b39e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Stereokit.Demo.ASA</DisplayName>
+    <DisplayName>Stereokit.Azure.SpatialAnchors</DisplayName>
     <PublisherDisplayName>StereoKit</PublisherDisplayName>
     <Logo>Assets\Logo\Logo-50.png</Logo>
   </Properties>
@@ -31,12 +31,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="Stereokit.Demo.ASA.App">
+      EntryPoint="Stereokit.Azure.SpatialAnchors.App">
       <uap:VisualElements
-        DisplayName="Stereokit.Demo.ASA"
+        DisplayName="Stereokit.Azure.SpatialAnchors"
         Square150x150Logo="Assets\Logo\Logo-150.png"
         Square44x44Logo="Assets\Logo\Logo-44.png"
-        Description="Stereokit.Demo.ASA"
+        Description="Stereokit.Azure.SpatialAnchors Demo App"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Logo\Logo-Wide150.png" Square71x71Logo="Assets\Logo\Logo-71.png" Square310x310Logo="Assets\Logo\Logo-310.png">
           <uap:ShowNameOnTiles>

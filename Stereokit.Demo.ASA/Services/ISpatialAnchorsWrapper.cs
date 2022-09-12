@@ -1,7 +1,7 @@
 ﻿using System;
 using StereoKit;
 
-namespace Stereokit.Demo.ASA.Services
+namespace Stereokit.Azure.SpatialAnchors.Services
 {
     internal interface ISpatialAnchorsWrapper
     {

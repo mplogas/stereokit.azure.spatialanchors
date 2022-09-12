@@ -8,7 +8,7 @@ using Microsoft.Azure.SpatialAnchors;
 using Windows.Perception.Spatial;
 using StereoKit;
 
-namespace Stereokit.Demo.ASA.Services
+namespace Stereokit.Azure.SpatialAnchors.Services
 {
     //max 1 watcher, max 35 anchors per watcher
     //https://docs.microsoft.com/en-us/azure/spatial-anchors/how-tos/create-locate-anchors-unity#locate-a-cloud-spatial-anchor

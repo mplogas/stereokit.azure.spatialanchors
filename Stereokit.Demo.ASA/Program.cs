@@ -1,8 +1,8 @@
 using StereoKit;
 using System;
-using Stereokit.Demo.ASA.Services;
+using Stereokit.Azure.SpatialAnchors.Services;
 
-namespace Stereokit.Demo.ASA
+namespace Stereokit.Azure.SpatialAnchors
 {
     internal class Program
     {

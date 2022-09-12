@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StereoKit;
 
-namespace Stereokit.Demo.ASA.Services
+namespace Stereokit.Azure.SpatialAnchors.Services
 {
     internal class MockSpatialAnchorsWrapper : ISpatialAnchorsWrapper
     {
@@ -14,6 +14,7 @@ namespace Stereokit.Demo.ASA.Services
         public event EventHandler<AsaLogEventArgs> ASALogEvent;
 
         private bool isSessionStarted;
+        private Random random = new Random();
 
         public MockSpatialAnchorsWrapper()
         {
@@ -37,9 +38,18 @@ namespace Stereokit.Demo.ASA.Services
             ASASessionUpdate?.Invoke(this, new AsaSessionUpdateEventArgs { IsRunning = isSessionStarted });
         }
 
-        public void StartLocatingAnchors(int maxResults = 5, float distance = 10)
+        public async void StartLocatingAnchors(int maxResults = 5, float distance = 10)
         {
-            throw new NotImplementedException();
+            for (var i = 0; i < maxResults; i++)
+            {
+                var arg = new SpatialAnchorLocatedEventArgs()
+                {
+                    Anchor = new Pose((float) this.random.NextDouble(), (float) this.random.NextDouble(),
+                        (float) this.random.NextDouble(), new Quat()),
+                    Id = Guid.NewGuid().ToString()
+                };
+                
+            }
         }
 
         public void StartLocatingAnchors(string[] anchorIds)
@@ -60,19 +70,18 @@ namespace Stereokit.Demo.ASA.Services
 
         private async Task LogEventEmitter()
         {
-            var r = new Random();
 
-            while (isSessionStarted)
+            while (this.isSessionStarted)
             {
                 var logEvent = new AsaLogEventArgs
                 {
-                    LogLevel = r.Next(0, 3) % 2 == 0 ? LogLevel.Diagnostic : LogLevel.Error,
+                    LogLevel = this.random.Next(0, 3) % 2 == 0 ? LogLevel.Diagnostic : LogLevel.Error,
                     LogMessage = "log message"
                 };
 
                 ASALogEvent?.Invoke(this, logEvent);
 
-                var delay = r.Next(2000, 10000);
+                var delay = this.random.Next(2000, 10000);
 
                 await Task.Delay(delay);
             }

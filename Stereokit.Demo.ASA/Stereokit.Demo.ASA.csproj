@@ -7,8 +7,8 @@
     <ProjectGuid>{32695184-702E-49D6-B030-5A58A6FE5ADE}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stereokit.Demo.ASA</RootNamespace>
-    <AssemblyName>Stereokit.Demo.ASA</AssemblyName>
+    <RootNamespace>Stereokit.Azure.SpatialAnchors</RootNamespace>
+    <AssemblyName>Stereokit.Azure.SpatialAnchors</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>

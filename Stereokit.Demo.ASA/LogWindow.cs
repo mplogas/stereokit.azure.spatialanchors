@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StereoKit;
-using Stereokit.Demo.ASA.Services;
+using Stereokit.Azure.SpatialAnchors.Services;
 using StereoKit.Framework;
 
-namespace Stereokit.Demo.ASA
+namespace Stereokit.Azure.SpatialAnchors
 {
     internal struct LogEntry
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StereoKit;
 
-namespace Stereokit.Demo.ASA.Services
+namespace Stereokit.Azure.SpatialAnchors.Services
 {
     internal class SpatialAnchorLocatedEventArgs : EventArgs
     {
