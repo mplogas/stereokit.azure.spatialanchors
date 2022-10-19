@@ -113,6 +113,9 @@
       <Name>Stereokit.Azure.SpatialAnchors</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Configuration.cs.template" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '16.0' ">
     <VisualStudioVersion>16.0</VisualStudioVersion>
   </PropertyGroup>

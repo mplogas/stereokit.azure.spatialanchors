@@ -1,0 +1,13 @@
+﻿using System;
+using System.Text;
+
+namespace Stereokit.Demo.ASA
+{
+    //use this as your Configuration.cs template
+    internal static class Configuration
+    {
+        internal const string AccountId = "";
+        internal const string AccountKey = "";
+        internal const string Domain = "";
+    }
+}
